@@ -193,14 +193,11 @@
 };
 
 window.addEventListener("load", () => {
-    BING_AUTOSEARCH.load();
+  BING_AUTOSEARCH.load();
 
-    window.dataLayer = window.dataLayer || [];
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'G-YXNCPPFVCW');
+  gtag('config', 'G-ZXTCJY38CG');
 });
