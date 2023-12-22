@@ -108,14 +108,14 @@
         interval: 10000,
         multitab: false,
         window: {
-            open: (url) => {
+            open: (url, window_close_delay = BING_AUTOSEARCH.interval) => {
                 try {
                     let w = window.open(url);
 
                     if (w) {
                         setTimeout(() => {
                             w.close();
-                        }, BING_AUTOSEARCH.search.interval);
+                        }, window_close_delay);
                     }
                 }
                 catch (e) { }
@@ -135,24 +135,32 @@
             }
         },
         start: () => {
+            var total_delay = 0;
             for (let i = 1; i <= BING_AUTOSEARCH.search.limit; i++) {
                 let term = BING_AUTOSEARCH.search.terms.random().toLowerCase();
-                let url = `https://www.bing.com/search?q=${encodeURI(term)}&FORM=QBLH&sp=1&lq=0`;
+                let url = `https://www.bing.com/search?q=${encodeURI(term)}&PC=U316&FORM=CHROMN`;
+                let rand = 0;
+                let delay = 0
+                if (i > 1) {
+                  rand = getRandomInteger(0, Math.round(BING_AUTOSEARCH.search.interval/2));
+                  delay = BING_AUTOSEARCH.search.interval + rand;
+                }
 
                 setTimeout(() => {
                     BING_AUTOSEARCH.elements.span.progress.innerText = `(${i}/${BING_AUTOSEARCH.search.limit})`;
-
+                    
                     if (i === BING_AUTOSEARCH.search.limit) {
                         setTimeout(() => {
                             BING_AUTOSEARCH.search.stop();
-                        }, BING_AUTOSEARCH.search.interval);
+                        }, 15000);
                     }
 
                     if (!BING_AUTOSEARCH.search.multitab)
                         BING_AUTOSEARCH.search.iframe.add(url, term);
                     else
-                        BING_AUTOSEARCH.search.window.open(url);
-                }, ((i - 1) * (BING_AUTOSEARCH.search.interval - 500)));
+                        BING_AUTOSEARCH.search.window.open(url, 10000 + getRandomInteger(0, 4000));
+                }, total_delay + delay);
+                total_delay += delay;
             }
         },
         stop: () => {
@@ -191,6 +199,10 @@
         });
     }
 };
+
+function getRandomInteger(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
 
 window.addEventListener("load", () => {
   BING_AUTOSEARCH.load();
