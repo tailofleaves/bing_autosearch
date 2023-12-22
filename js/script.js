@@ -159,8 +159,7 @@
         },
         stop: () => {
             window.open("https://rewards.bing.com/pointsbreakdown");
-
-            location.reload();
+            BING_AUTOSEARCH.reload();
         }
     },
     load: () => {
@@ -188,7 +187,12 @@
         BING_AUTOSEARCH.elements.select.interval.addEventListener("change", () => {
             BING_AUTOSEARCH.localStorage.set("_search_interval", BING_AUTOSEARCH.elements.select.interval.value);
         });
-    }
+    },
+    reload: () => {
+      BING_AUTOSEARCH.localStorage.load();
+      BING_AUTOSEARCH.elements.button.start.style.display = "inline-block";
+      BING_AUTOSEARCH.elements.button.stop.style.display = "none";
+  }
 };
 
 function getRandomInteger(min, max) {
@@ -203,4 +207,10 @@ window.addEventListener("load", () => {
   gtag('js', new Date());
 
   gtag('config', 'G-ZXTCJY38CG');
+
+  var url = window.location;
+  let params = new URLSearchParams(url.search);
+  if(params.has('autorun') || params.has('autostart')) {
+    BING_AUTOSEARCH.elements.button.start.click();
+  }
 });
