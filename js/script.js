@@ -16,51 +16,36 @@
             bing: document.getElementById("div-bing")
         }
     },
-    cookies: {
-        set: (name, value, expires) => {
+    localStorage: {
+        set: (name, value) => {
             try {
-                let d = new Date();
-                d.setTime(d.getTime() + (expires * 24 * 60 * 60 * 1000));
-
-                let cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
-
-                document.cookie = cookie;
+                localStorage.setItem(name, value)
+                BING_AUTOSEARCH.localStorage.reload();
             }
             catch (e) { }
         },
         get: (name) => {
-            let value = null;
-
-            try {
-                let cookies = document.cookie.split(';');
-
-                cookies.forEach((cookie) => {
-                    if ((cookie + "=").trim().indexOf(name) == 0)
-                        value = cookie.substring(name.length + 2, cookie.length);
-                });
-            }
-            catch (e) { }
-
+            let value = localStorage.getItem(name);
             return { name, value };
         },
         load: () => {
             let modal_help = new bootstrap.Modal(document.getElementById('modal-help'), {});
 
-            let _need_help = BING_AUTOSEARCH.cookies.get("_need_help");
-            let _multitab_mode = BING_AUTOSEARCH.cookies.get("_multitab_mode");
-            let _search_interval = BING_AUTOSEARCH.cookies.get("_search_interval");
-            let _search_limit = BING_AUTOSEARCH.cookies.get("_search_limit");
+            let _need_help = BING_AUTOSEARCH.localStorage.get("_need_help");
+            let _multitab_mode = BING_AUTOSEARCH.localStorage.get("_multitab_mode");
+            let _search_interval = BING_AUTOSEARCH.localStorage.get("_search_interval");
+            let _search_limit = BING_AUTOSEARCH.localStorage.get("_search_limit");
 
             if (!_need_help.value) {
                 modal_help.show();
 
-                BING_AUTOSEARCH.cookies.set("_need_help", BING_AUTOSEARCH.search.multitab.toString(), 365);
+                BING_AUTOSEARCH.localStorage.set("_need_help", BING_AUTOSEARCH.search.multitab.toString());
             }
 
             if (!_search_interval.value) {
                 modal_help.show();
 
-                BING_AUTOSEARCH.cookies.set("_search_interval", BING_AUTOSEARCH.search.interval.toString(), 365);
+                BING_AUTOSEARCH.localStorage.set("_search_interval", BING_AUTOSEARCH.search.interval.toString());
             }
             else {
                 BING_AUTOSEARCH.elements.select.interval.value = BING_AUTOSEARCH.search.interval = parseInt(_search_interval.value.toString());
@@ -69,7 +54,7 @@
             if (!_search_limit.value) {
                 modal_help.show();
 
-                BING_AUTOSEARCH.cookies.set("_search_limit", BING_AUTOSEARCH.search.limit.toString(), 365);
+                BING_AUTOSEARCH.localStorage.set("_search_limit", BING_AUTOSEARCH.search.limit.toString());
             }
             else {
                 BING_AUTOSEARCH.elements.select.limit.value = BING_AUTOSEARCH.search.limit = parseInt(_search_limit.value.toString());
@@ -81,13 +66,22 @@
                         BING_AUTOSEARCH.elements.select.multitab.value = "true";
                 })(navigator.userAgent || navigator.vendor || window.opera);
 
-                BING_AUTOSEARCH.cookies.set("_multitab_mode", BING_AUTOSEARCH.elements.select.multitab.value, 365);
+                BING_AUTOSEARCH.localStorage.set("_multitab_mode", BING_AUTOSEARCH.elements.select.multitab.value);
             }
             else {
                 BING_AUTOSEARCH.elements.select.multitab.value = _multitab_mode.value;
                 BING_AUTOSEARCH.search.multitab = (_multitab_mode.value === "true");
             }
-        }
+        },
+        reload: () => {
+          let _multitab_mode = BING_AUTOSEARCH.localStorage.get("_multitab_mode");
+          let _search_interval = BING_AUTOSEARCH.localStorage.get("_search_interval");
+          let _search_limit = BING_AUTOSEARCH.localStorage.get("_search_limit");
+
+          BING_AUTOSEARCH.search.interval = parseInt(_search_interval.value.toString());
+          BING_AUTOSEARCH.search.limit = parseInt(_search_limit.value.toString());
+          BING_AUTOSEARCH.search.multitab = (_multitab_mode.value === "true");
+      }
     },
     search: {
         terms: {
@@ -170,7 +164,7 @@
         }
     },
     load: () => {
-        BING_AUTOSEARCH.cookies.load();
+        BING_AUTOSEARCH.localStorage.load();
 
         BING_AUTOSEARCH.elements.button.start.addEventListener("click", () => {
             BING_AUTOSEARCH.elements.button.start.style.display = "none";
@@ -184,18 +178,15 @@
         });
 
         BING_AUTOSEARCH.elements.select.multitab.addEventListener("change", () => {
-            BING_AUTOSEARCH.cookies.set("_multitab_mode", BING_AUTOSEARCH.elements.select.multitab.value, 365);
-            location.reload();
+            BING_AUTOSEARCH.localStorage.set("_multitab_mode", BING_AUTOSEARCH.elements.select.multitab.value);
         });
 
         BING_AUTOSEARCH.elements.select.limit.addEventListener("change", () => {
-            BING_AUTOSEARCH.cookies.set("_search_limit", BING_AUTOSEARCH.elements.select.limit.value, 365);
-            location.reload();
+            BING_AUTOSEARCH.localStorage.set("_search_limit", BING_AUTOSEARCH.elements.select.limit.value);
         });
 
         BING_AUTOSEARCH.elements.select.interval.addEventListener("change", () => {
-            BING_AUTOSEARCH.cookies.set("_search_interval", BING_AUTOSEARCH.elements.select.interval.value, 365);
-            location.reload();
+            BING_AUTOSEARCH.localStorage.set("_search_interval", BING_AUTOSEARCH.elements.select.interval.value);
         });
     }
 };
