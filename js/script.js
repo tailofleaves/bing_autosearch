@@ -1,4 +1,5 @@
-﻿const BING_AUTOSEARCH = {
+﻿var timeouts = [];
+const BING_AUTOSEARCH = {
     elements: {
         button: {
             start: document.getElementById("btn-start"),
@@ -14,6 +15,10 @@
         },
         div: {
             bing: document.getElementById("div-bing")
+        },
+        countdown: {
+          div: document.getElementById("countdown-div"),
+          header: document.getElementById("countdown-header"),
         }
     },
     localStorage: {
@@ -107,9 +112,9 @@
                     let w = window.open(url);
 
                     if (w) {
-                        setTimeout(() => {
+                        timeouts.push(setTimeout(() => {
                             w.close();
-                        }, window_close_delay);
+                        }, window_close_delay));
                     }
                 }
                 catch (e) { }
@@ -129,7 +134,10 @@
             }
         },
         start: () => {
+            BING_AUTOSEARCH.elements.countdown.div.style.display = "block";
             var total_delay = 0;
+            var delay_list = [];
+            var countdown = undefined;
             for (let i = 1; i <= BING_AUTOSEARCH.search.limit; i++) {
                 let term = BING_AUTOSEARCH.search.terms.random().toLowerCase();
                 let url = `https://www.bing.com/search?q=${encodeURI(term)}&PC=U316&FORM=CHROMN`;
@@ -140,25 +148,47 @@
                   delay = BING_AUTOSEARCH.search.interval + rand;
                 }
 
-                setTimeout(() => {
+                timeouts.push(setTimeout(() => {
                     BING_AUTOSEARCH.elements.span.progress.innerText = `(${i}/${BING_AUTOSEARCH.search.limit})`;
                     
                     if (i === BING_AUTOSEARCH.search.limit) {
-                        setTimeout(() => {
-                            BING_AUTOSEARCH.search.stop();
-                        }, 15000);
+                        timeouts.push(setTimeout(() => {
+                          BING_AUTOSEARCH.search.stop();
+                          countdown.clearInterval();
+                        }, 15000));
                     }
 
                     if (!BING_AUTOSEARCH.search.multitab)
                         BING_AUTOSEARCH.search.iframe.add(url, term);
                     else
                         BING_AUTOSEARCH.search.window.open(url, 10000 + getRandomInteger(0, 4000));
-                }, total_delay + delay);
+                    
+                    // display countdown
+                    try {
+                      clearInterval(countdown);
+                    }
+                    catch(error) {}
+                    countdown = setInterval(function() {
+                      let now = new Date().getTime();
+                      let distance = delay_list[i] - now
+                      let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                      let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                      BING_AUTOSEARCH.elements.countdown.header.innerText = "Next search in: " + minutes.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ":" + seconds.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+                    }, 1000);
+                }, total_delay + delay));
+                delay_list.push(new Date().getTime() + total_delay + delay);
                 total_delay += delay;
             }
         },
         stop: () => {
             window.open("https://rewards.bing.com/pointsbreakdown");
+            for (let i = 0; i < timeouts.length; i++) {
+              try {
+                clearInterval(timeouts[i]);
+              }
+              catch(error) {}
+            }
+            timeouts = [];
             BING_AUTOSEARCH.reload();
         }
     },
@@ -187,11 +217,14 @@
         BING_AUTOSEARCH.elements.select.interval.addEventListener("change", () => {
             BING_AUTOSEARCH.localStorage.set("_search_interval", BING_AUTOSEARCH.elements.select.interval.value);
         });
+
+        BING_AUTOSEARCH.elements.countdown.div.style.display = "none";
     },
     reload: () => {
       BING_AUTOSEARCH.localStorage.load();
       BING_AUTOSEARCH.elements.button.start.style.display = "inline-block";
       BING_AUTOSEARCH.elements.button.stop.style.display = "none";
+      BING_AUTOSEARCH.elements.countdown.div.style.display = "none";
   }
 };
 
