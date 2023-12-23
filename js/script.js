@@ -175,6 +175,7 @@ const BING_AUTOSEARCH = {
                       let seconds = Math.floor((distance % (1000 * 60)) / 1000);
                       BING_AUTOSEARCH.elements.countdown.header.innerText = "Next search in: " + minutes.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ":" + seconds.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
                     }, 1000);
+                    timeouts.push(countdown);
                 }, total_delay + delay));
                 delay_list.push(new Date().getTime() + total_delay + delay);
                 total_delay += delay;
@@ -225,6 +226,7 @@ const BING_AUTOSEARCH = {
       BING_AUTOSEARCH.elements.button.start.style.display = "inline-block";
       BING_AUTOSEARCH.elements.button.stop.style.display = "none";
       BING_AUTOSEARCH.elements.countdown.div.style.display = "none";
+      BING_AUTOSEARCH.elements.countdown.header.innerText = "Next search in: 00:00"
   }
 };
 
