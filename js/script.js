@@ -19,6 +19,7 @@ const BING_AUTOSEARCH = {
         countdown: {
           div: document.getElementById("countdown-div"),
           header: document.getElementById("countdown-header"),
+          header_final: document.getElementById("countdown-final-header"),
         }
     },
     localStorage: {
@@ -174,10 +175,19 @@ const BING_AUTOSEARCH = {
                       let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                       let seconds = Math.floor((distance % (1000 * 60)) / 1000);
                       BING_AUTOSEARCH.elements.countdown.header.innerText = "Next search in: " + minutes.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ":" + seconds.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
-                    }, 1000);
+                      let distance_final = delay_list[delay_list.length - 1] - now
+                      var hours_final = Math.floor((distance_final % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                      let minutes_final = Math.floor((distance_final % (1000 * 60 * 60)) / (1000 * 60));
+                      let seconds_final = Math.floor((distance_final % (1000 * 60)) / 1000);
+                      BING_AUTOSEARCH.elements.countdown.header_final.innerText = "Completion in: " + hours_final.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ":" + minutes_final.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ":" + seconds_final.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+                    }, 200);
                     timeouts.push(countdown);
                 }, total_delay + delay));
                 delay_list.push(new Date().getTime() + total_delay + delay);
+                // add final delay
+                if (i === BING_AUTOSEARCH.search.limit) {
+                  delay_list.push(new Date().getTime() + total_delay + delay + 15000)
+                }
                 total_delay += delay;
             }
         },
@@ -226,7 +236,8 @@ const BING_AUTOSEARCH = {
       BING_AUTOSEARCH.elements.button.start.style.display = "inline-block";
       BING_AUTOSEARCH.elements.button.stop.style.display = "none";
       BING_AUTOSEARCH.elements.countdown.div.style.display = "none";
-      BING_AUTOSEARCH.elements.countdown.header.innerText = "Next search in: 00:00"
+      BING_AUTOSEARCH.elements.countdown.header.innerText = "Next search in: 00:00";
+      BING_AUTOSEARCH.elements.countdown.header_final.innerText = "Completion in: 00:00";
   }
 };
 
