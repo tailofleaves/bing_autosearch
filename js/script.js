@@ -21,6 +21,9 @@ const BING_AUTOSEARCH = {
           div: document.getElementById("countdown-div"),
           header: document.getElementById("countdown-header"),
           header_final: document.getElementById("countdown-final-header"),
+        },
+        link: {
+          multi_test: document.getElementById("link-test-multi"),
         }
     },
     localStorage: {
@@ -253,6 +256,8 @@ const BING_AUTOSEARCH = {
           BING_AUTOSEARCH.localStorage.set("_randomized_intervals", BING_AUTOSEARCH.elements.select.random.value);
         });
 
+        BING_AUTOSEARCH.elements.link.multi_test.addEventListener("click", testPopup);
+
         BING_AUTOSEARCH.elements.countdown.div.style.display = "none";
     },
     reload: () => {
@@ -267,6 +272,29 @@ const BING_AUTOSEARCH = {
 
 function getRandomInteger(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function testPopup() {
+  BING_AUTOSEARCH.elements.link.multi_test.innerHTML = "Testing...<br/>Please refrain from any mouse clicks or touch inputs during the test.";
+  let timer = 7;
+  BING_AUTOSEARCH.elements.link.multi_test.removeEventListener("click", testPopup);
+  testInterval = setInterval(() => {
+    if(timer >= 0 && timer <= 5) {
+      BING_AUTOSEARCH.elements.link.multi_test.innerHTML = "Testing... Pop-up in: " + timer + "<br/>Please refrain from any mouse clicks or touch inputs during the test.";
+    }
+    if (timer === 0) {
+      var popup = window.open("https://rewards.bing.com");
+      BING_AUTOSEARCH.elements.link.multi_test.innerHTML = "Test Permissions <i class='fa-solid fa-arrow-right'></i>";
+      if (popup == null || typeof(popup)=='undefined') {  
+        BING_AUTOSEARCH.elements.link.multi_test.innerHTML += "<span class='text-danger'>&nbsp;Failed.<br/>Please check your permissions.</span>";
+      } else {
+        BING_AUTOSEARCH.elements.link.multi_test.innerHTML += "<span class='text-success'>&nbsp;Success.</span>";
+      }
+      clearInterval(testInterval);
+      BING_AUTOSEARCH.elements.link.multi_test.addEventListener("click", testPopup);
+    }
+    timer--;
+  }, 1000);
 }
 
 window.addEventListener("load", () => {
