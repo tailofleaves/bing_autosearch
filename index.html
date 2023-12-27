@@ -118,14 +118,28 @@
                         </div>
                     </div>
                     <div class="mt-2">
+                      <h6>
+                          <strong>Randomized Intervals</strong>
+                      </h6>
+                      <p class="mt-2 mb-2 small">
+                          Adds a random amount of time between each interval to avoid bot detection.
+                      </p>
+                      <div class="form-group">
+                          <select class="form-select" id="slc-random">
+                            <option value="true" selected="selected">Enabled (default)</option>
+                              <option value="false">Disabled</option>
+                          </select>
+                      </div>
+                  </div>
+                    <div class="mt-2">
                         <h6>
                             <strong>Multi-tab Mode</strong>
                         </h6>
                         <p class="mt-2 mb-2 small"><strong class="text-danger">Be aware! To use the multi-tab mode, it's necessary to allow the opening of multiple tabs/pop-ups in your browser.</strong></p>
                         <div class="form-group">
                             <select class="form-select" id="slc-multitab">
-                                <option value="true">Enable multi-tab mode</option>
-                                <option value="false" selected="selected">Disable multi-tab mode (default)</option>
+                                <option value="true">Enabled</option>
+                                <option value="false" selected="selected">Disabled (default)</option>
                             </select>
                         </div>
                         <p class="mt-2 mb-2 small">Due to system restrictions, for some devices/browsers it may be necessary to open multiple tabs to search and receive rewards points (enable if this is your case).</p>
