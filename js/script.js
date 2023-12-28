@@ -34,7 +34,6 @@ const BING_AUTOSEARCH = {
         set: (name, value) => {
             try {
                 localStorage.setItem(name, value)
-                BING_AUTOSEARCH.localStorage.reload();
             }
             catch (e) { }
         },
@@ -103,6 +102,7 @@ const BING_AUTOSEARCH = {
                 BING_AUTOSEARCH.search.multitab = (_multitab_mode.value === "true");
             }
             BING_AUTOSEARCH.elements.link.autostart.value = getAutostartLink();
+            BING_AUTOSEARCH.localStorage.reload();
         },
         reload: () => {
           let _multitab_mode = BING_AUTOSEARCH.localStorage.get("_multitab_mode");
@@ -246,7 +246,7 @@ const BING_AUTOSEARCH = {
               catch(error) {}
             }
             timeouts = [];
-            BING_AUTOSEARCH.reload();
+            BING_AUTOSEARCH.localStorage.reload();
         }
     },
     load: () => {
@@ -342,7 +342,7 @@ function getAutostartLink() {
   var url = "https://bing.tailofleaves.dev?autostart=true";
   url += "&limit=" + BING_AUTOSEARCH.search.limit.toString();
   url += "&interval=" + BING_AUTOSEARCH.search.interval.toString();
-  url += "&randomize=" + BING_AUTOSEARCH.search.random.toString();
+  url += "&random=" + BING_AUTOSEARCH.search.random.toString();
   url += "&audio=" + BING_AUTOSEARCH.search.audio.toString();
   url += "&multitab=" + BING_AUTOSEARCH.search.multitab.toString();
   return url;
@@ -403,4 +403,5 @@ window.addEventListener("load", () => {
   if(getURLParameter('autorun') === 'true' || getURLParameter('autostart') === 'true') {
     BING_AUTOSEARCH.elements.button.start.click();
   }
+  BING_AUTOSEARCH.localStorage.reload();
 });
