@@ -192,6 +192,7 @@ const BING_AUTOSEARCH = {
 
         timeouts.push(setTimeout(() => {
           BING_AUTOSEARCH.elements.span.progress.innerText = `(${i}/${BING_AUTOSEARCH.search.limit})`;
+          document.title = `(${i}/${BING_AUTOSEARCH.search.limit})` + " - Bing Auto Search for Microsoft Rewards"
             
           if (i === BING_AUTOSEARCH.search.limit) {
             timeouts.push(setTimeout(() => {
@@ -251,6 +252,7 @@ const BING_AUTOSEARCH = {
       }
       timeouts = [];
       BING_AUTOSEARCH.reload();
+      document.title = "Bing Auto Search for Microsoft Rewards"
     }
   },
   load: () => {
