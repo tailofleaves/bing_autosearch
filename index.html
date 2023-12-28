@@ -46,6 +46,7 @@
                 </div>
             </div>
             <div id="div-bing"></div>
+            <audio id="silence" src="silence.mp3" loop="loop" muted></audio>
         </main>
         <footer>
             <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modal-help">Need help? (Tutorial and Settings)</a><br />
@@ -131,7 +132,21 @@
                               <option value="false">Disabled</option>
                           </select>
                       </div>
-                  </div>
+                    </div>
+                    <div class="mt-2">
+                      <h6>
+                          <strong>Background Audio</strong>
+                      </h6>
+                      <p class="mt-2 mb-2 small">
+                        Plays a silent looping audio track during the search to keep the site running in the background. Useful for mobile devices.
+                      </p>
+                      <div class="form-group">
+                          <select class="form-select" id="slc-audio">
+                              <option value="true">Enabled</option>
+                              <option value="false" selected="selected">Disabled (default)</option>
+                          </select>
+                      </div>
+                    </div>
                     <div class="mt-2">
                         <h6>
                             <strong>Multi-tab Mode</strong>
