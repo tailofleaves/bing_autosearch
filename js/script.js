@@ -3,7 +3,8 @@ const BING_AUTOSEARCH = {
     elements: {
         button: {
             start: document.getElementById("btn-start"),
-            stop: document.getElementById("btn-stop")
+            stop: document.getElementById("btn-stop"),
+            copy_autostart: document.getElementById("btn-autostart-copy")
         },
         select: {
             limit: document.getElementById("slc-limit"),
@@ -24,6 +25,7 @@ const BING_AUTOSEARCH = {
         },
         link: {
           multi_test: document.getElementById("link-test-multi"),
+          autostart: document.getElementById("autostart-link"),
         }
     },
     localStorage: {
@@ -90,6 +92,7 @@ const BING_AUTOSEARCH = {
                 BING_AUTOSEARCH.elements.select.multitab.value = _multitab_mode.value;
                 BING_AUTOSEARCH.search.multitab = (_multitab_mode.value === "true");
             }
+            BING_AUTOSEARCH.elements.link.autostart.value = getAutostartLink();
         },
         reload: () => {
           let _multitab_mode = BING_AUTOSEARCH.localStorage.get("_multitab_mode");
@@ -97,10 +100,11 @@ const BING_AUTOSEARCH = {
           let _search_limit = BING_AUTOSEARCH.localStorage.get("_search_limit");
           let _randomized_intervals = BING_AUTOSEARCH.localStorage.get("_randomized_intervals");
 
-          BING_AUTOSEARCH.search.interval = parseInt(_search_interval.value.toString());
-          BING_AUTOSEARCH.search.limit = parseInt(_search_limit.value.toString());
-          BING_AUTOSEARCH.search.multitab = (_multitab_mode.value === "true");
-          BING_AUTOSEARCH.search.random = (_randomized_intervals.value === "true");
+          BING_AUTOSEARCH.elements.select.interval.value = BING_AUTOSEARCH.search.interval = parseInt(_search_interval.value.toString());
+          BING_AUTOSEARCH.elements.select.limit.value = BING_AUTOSEARCH.search.limit = parseInt(_search_limit.value.toString());
+          BING_AUTOSEARCH.elements.select.multitab.value = BING_AUTOSEARCH.search.multitab = (_multitab_mode.value === "true");
+          BING_AUTOSEARCH.elements.select.random.value = BING_AUTOSEARCH.search.random = (_randomized_intervals.value === "true");
+          BING_AUTOSEARCH.elements.link.autostart.value = getAutostartLink();
       }
     },
     search: {
@@ -259,6 +263,10 @@ const BING_AUTOSEARCH = {
         BING_AUTOSEARCH.elements.link.multi_test.addEventListener("click", testPopup);
 
         BING_AUTOSEARCH.elements.countdown.div.style.display = "none";
+
+        BING_AUTOSEARCH.elements.button.copy_autostart.addEventListener("mouseout", () => {
+          BING_AUTOSEARCH.elements.button.copy_autostart.setAttribute('data-bs-original-title', 'Copy to clipboard');
+        });
     },
     reload: () => {
       BING_AUTOSEARCH.localStorage.load();
@@ -284,7 +292,7 @@ function testPopup() {
     }
     if (timer === 0) {
       var popup = window.open("https://rewards.bing.com");
-      BING_AUTOSEARCH.elements.link.multi_test.innerHTML = "Test Permissions <i class='fa-solid fa-arrow-right'></i>";
+      BING_AUTOSEARCH.elements.link.multi_test.innerHTML = "Test <i class='fa-solid fa-arrow-right'></i>";
       if (popup == null || typeof(popup)=='undefined') {  
         BING_AUTOSEARCH.elements.link.multi_test.innerHTML += "<span class='text-danger'>&nbsp;Failed.<br/>Please check your permissions.</span>";
       } else {
@@ -297,18 +305,73 @@ function testPopup() {
   }, 1000);
 }
 
+function getURLParameter(name) {
+  var url = window.location;
+  let params = new URLSearchParams(url.search);
+  if (params.has(name)) {
+    return params.get(name).toLowerCase();
+  } else  {
+    return '';
+  }
+}
+
+function getAutostartLink() {
+  var url = "https://bing.tailofleaves.dev?autostart=true";
+  url += "&limit=" + BING_AUTOSEARCH.search.limit.toString();
+  url += "&interval=" + BING_AUTOSEARCH.search.interval.toString();
+  url += "&randomize=" + BING_AUTOSEARCH.search.random.toString();
+  url += "&multitab=" + BING_AUTOSEARCH.search.multitab.toString();
+  return url;
+}
+
+const copyAutostartLink = async () => {
+  try {
+    const element = document.getElementById("autostart-link");
+    await navigator.clipboard.writeText(element.value);
+    BING_AUTOSEARCH.elements.button.copy_autostart.setAttribute('data-bs-original-title', 'Copied!');
+    bootstrap.Tooltip.getInstance(BING_AUTOSEARCH.elements.button.copy_autostart).show();
+    // Optional: Display a success message to the user
+  } catch (error) {
+    console.error("Failed to copy to clipboard:", error);
+  }
+};
+
 window.addEventListener("load", () => {
   BING_AUTOSEARCH.load();
 
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-ZXTCJY38CG');
 
-  var url = window.location;
-  let params = new URLSearchParams(url.search);
-  if(params.has('autorun') || params.has('autostart')) {
+  // initialize tooltips
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+
+  //check for limit parameter
+  if(!isNaN(parseInt(getURLParameter('limit')))) {
+    BING_AUTOSEARCH.localStorage.set("_search_limit", getURLParameter('limit'));
+  }
+  //check for interval parameter
+  if(!isNaN(parseInt(getURLParameter('interval')))) {
+    BING_AUTOSEARCH.localStorage.set("_search_interval", getURLParameter('interval'));
+  }
+  //check for random parameter
+  if(getURLParameter('random') !== '') {
+    if(getURLParameter('random') === 'true' || getURLParameter('random') === 'false') {
+      BING_AUTOSEARCH.localStorage.set("_randomized_intervals", getURLParameter('random'));
+    }
+  }
+  //check for multitab parameter
+  if(getURLParameter('multitab') !== '') {
+    if(getURLParameter('multitab') === 'true' || getURLParameter('multitab') === 'false') {
+      BING_AUTOSEARCH.localStorage.set("_multitab_mode", getURLParameter('multitab'));
+    }
+  }
+  //check for autostart parameter
+  if(getURLParameter('autorun') === 'true' || getURLParameter('autostart') === 'true') {
     BING_AUTOSEARCH.elements.button.start.click();
   }
 });
