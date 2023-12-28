@@ -58,6 +58,10 @@ body {
   height: 0px !important;
 }
 
+#silence {
+  display: none;
+}
+
 #wrapper h1,
 #wrapper h2, 
 footer p.pt-3,

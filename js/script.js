@@ -34,6 +34,7 @@ const BING_AUTOSEARCH = {
     set: (name, value) => {
       try {
         localStorage.setItem(name, value)
+        BING_AUTOSEARCH.localStorage.reload();
       }
       catch (e) { }
     },
@@ -100,7 +101,6 @@ const BING_AUTOSEARCH = {
       }
 
       BING_AUTOSEARCH.elements.link.autostart.value = getAutostartLink();
-      BING_AUTOSEARCH.localStorage.reload();
     },
     reload: () => {
       let _multitab_mode = BING_AUTOSEARCH.localStorage.get("_multitab_mode");
@@ -109,11 +109,16 @@ const BING_AUTOSEARCH = {
       let _randomized_intervals = BING_AUTOSEARCH.localStorage.get("_randomized_intervals");
       let _background_audio = BING_AUTOSEARCH.localStorage.get("_background_audio");
 
-      BING_AUTOSEARCH.elements.select.interval.value = BING_AUTOSEARCH.search.interval = parseInt(_search_interval.value.toString());
-      BING_AUTOSEARCH.elements.select.limit.value = BING_AUTOSEARCH.search.limit = parseInt(_search_limit.value.toString());
-      BING_AUTOSEARCH.elements.select.multitab.value = BING_AUTOSEARCH.search.multitab = (_multitab_mode.value === "true");
-      BING_AUTOSEARCH.elements.select.random.value = BING_AUTOSEARCH.search.random = (_randomized_intervals.value === "true");
-      BING_AUTOSEARCH.elements.select.audio.value = BING_AUTOSEARCH.search.audio = (_background_audio.value === "true");
+      if(_search_interval.value)
+        BING_AUTOSEARCH.elements.select.interval.value = BING_AUTOSEARCH.search.interval = parseInt(_search_interval.value.toString());
+      if(_search_limit.value)
+        BING_AUTOSEARCH.elements.select.limit.value = BING_AUTOSEARCH.search.limit = parseInt(_search_limit.value.toString());
+      if(_multitab_mode.value)
+        BING_AUTOSEARCH.elements.select.multitab.value = BING_AUTOSEARCH.search.multitab = (_multitab_mode.value === "true");
+      if(_randomized_intervals.value)
+        BING_AUTOSEARCH.elements.select.random.value = BING_AUTOSEARCH.search.random = (_randomized_intervals.value === "true");
+      if(_background_audio.value)
+        BING_AUTOSEARCH.elements.select.audio.value = BING_AUTOSEARCH.search.audio = (_background_audio.value === "true");
       BING_AUTOSEARCH.elements.link.autostart.value = getAutostartLink();
     }
   },
@@ -166,6 +171,7 @@ const BING_AUTOSEARCH = {
     start: () => {
       if(BING_AUTOSEARCH.search.audio) {
         BING_AUTOSEARCH.elements.span.silence.play();
+        BING_AUTOSEARCH.elements.span.silence.style.display = "inline";
       }
       BING_AUTOSEARCH.elements.countdown.div.style.display = "block";
       var total_delay = 0;
@@ -244,7 +250,7 @@ const BING_AUTOSEARCH = {
         catch(error) {}
       }
       timeouts = [];
-      BING_AUTOSEARCH.localStorage.reload();
+      BING_AUTOSEARCH.reload();
     }
   },
   load: () => {
@@ -294,6 +300,7 @@ const BING_AUTOSEARCH = {
     BING_AUTOSEARCH.elements.button.start.style.display = "inline-block";
     BING_AUTOSEARCH.elements.button.stop.style.display = "none";
     BING_AUTOSEARCH.elements.countdown.div.style.display = "none";
+    BING_AUTOSEARCH.elements.span.silence.style.display = "none";
     BING_AUTOSEARCH.elements.countdown.header.innerText = "Next search in: 00:00";
     BING_AUTOSEARCH.elements.countdown.header_final.innerText = "Completion in: 00:00";
   }
@@ -401,5 +408,4 @@ window.addEventListener("load", () => {
   if(getURLParameter('autorun') === 'true' || getURLParameter('autostart') === 'true') {
     BING_AUTOSEARCH.elements.button.start.click();
   }
-  BING_AUTOSEARCH.localStorage.reload();
 });
