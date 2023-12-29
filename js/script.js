@@ -346,7 +346,7 @@ function getURLParameter(name) {
 }
 
 function getAutostartLink() {
-  var url = "https://bing.tailofleaves.dev?autostart=true";
+  var url = "https://autosearch.tailofleaves.dev?autostart=true";
   url += "&limit=" + BING_AUTOSEARCH.search.limit.toString();
   url += "&interval=" + BING_AUTOSEARCH.search.interval.toString();
   url += "&random=" + BING_AUTOSEARCH.search.random.toString();

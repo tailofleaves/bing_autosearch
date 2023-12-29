@@ -4,4 +4,4 @@ Browser-based Bing auto search bot to earn Microsoft Rewards points.
 
 Forked from https://github.com/gerisonsabino/bing_autosearch
 
-https://bing.tailofleaves.dev
+https://autosearch.tailofleaves.dev
