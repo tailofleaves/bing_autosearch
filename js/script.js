@@ -137,7 +137,7 @@ const BING_AUTOSEARCH = {
       }
     },
     limit: 30,
-    interval: 10000,
+    interval: 60000,
     multitab: false,
     random: true,
     audio: false,

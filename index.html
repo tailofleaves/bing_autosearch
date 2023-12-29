@@ -57,9 +57,9 @@
     </p>
     <small>Microsoft, Rewards, Bing and Edge are registered trademarks of Microsoft Corporation in the United States of America and elsewhere. The use on this page is for illustrative purposes only.</small>
     <hr />
+    <label>Site by</label>&nbsp;<a href="https://github.com/tailofleaves/bing_autosearch" target="_blank">tailofleaves</a><br />
     <label>Original site by</label>&nbsp;<a href="https://github.com/gerisonsabino/bing_autosearch" target="_blank">Gérison Sabino</a><br />
-    <label>Modified site by</label>&nbsp;<a href="https://github.com/tailofleaves/bing_autosearch" target="_blank">tailofleaves</a><br />
-    <label>v1.2.2</label>
+    <label>v1.2.3</label>
   </footer>
   </section>
   <div class="modal fade" id="modal-help" tabindex="-1" aria-labelledby="modal-help" aria-hidden="true">
@@ -75,11 +75,9 @@
               <strong>Tutorial</strong>
             </h6>
             <ol class="px-3 small">
-              <!--<li>Use <a href="https://www.microsoft.com/edge/download" target="_blank">Microsoft Edge (<img src="img/edge.png" alt="Microsoft Edge" />)</a> browser to earn extra points.</li>-->
-              <li><a href="https://www.bing.com/" target="_blank">Sign in to Bing</a> with your Microsoft Rewards account and return to this page.</li>
+              <li>Make sure you are <a href="https://rewards.bing.com" target="_blank">signed into</a> your Microsoft Rewards account.</li>
               <li>Start a new auto search by clicking the "Start Auto Search" button.</li>
-              <li>The progress counter can be viewed on the "Stop Auto Search" button.</li>
-              <li>To perform mobile searches, use your smartphone or emulate a mobile browser through the developer tools (F12) on the PC.</li>
+              <li>To perform mobile searches, use a mobile device or emulate a mobile browser through the developer tools (F12) on the PC.</li>
             </ol>
           </div>
           <div>
@@ -107,10 +105,10 @@
             <div class="form-group">
               <select class="form-select" id="slc-interval">
                 <option value="5000">5 seconds</option>
-                <option value="10000" selected="selected">10 seconds (default)</option>
+                <option value="10000">10 seconds</option>
                 <option value="15000">15 seconds</option>
                 <option value="30000">30 seconds</option>
-                <option value="60000">1 minute</option>
+                <option value="60000" selected="selected">1 minute (default)</option>
                 <option value="120000">2 minutes</option>
                 <option value="180000">3 minutes</option>
                 <option value="300000">5 minutes</option>
@@ -138,7 +136,7 @@
               <strong>Background Audio</strong>
             </h6>
             <p class="mt-2 mb-2 small">
-              Plays a silent looping audio track during the search to keep the site running in the background. Useful for mobile devices.
+              Plays a silent, looping audio track during the search to keep the site running in the background. Useful for mobile devices to keep the site running even while the device is sleeping/locked. <i>Note: May not work with auto-start.</i>
             </p>
             <div class="form-group">
               <select class="form-select" id="slc-audio">
@@ -170,7 +168,7 @@
               <strong>Auto-start Link</strong>
             </h6>
             <p class="mt-2 mb-2 small">
-              Get a link that starts searching on page load with the configured settings. Useful for automating daily searches.
+              Gets a link that starts the auto search on page load with the configured settings. Useful for automating daily searches.
             </p>
             <div class="form-group">
               <div class="input-group mb-3">
@@ -183,6 +181,6 @@
       </div>
     </div>
   </div>
-  <script type="text/javascript" src="js/script.js?v=1.2.2"></script>
+  <script type="text/javascript" src="js/script.js?v=1.2.3"></script>
 </body>
 </html>
