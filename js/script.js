@@ -168,7 +168,7 @@ const BING_AUTOSEARCH = {
       var countdown = undefined;
       for (let i = 1; i <= BING_AUTOSEARCH.search.limit; i++) {
         let term = BING_AUTOSEARCH.search.terms.random().toLowerCase();
-        let url = `https://www.bing.com/search?q=${encodeURI(term)}&PC=U316&FORM=CHROMN`;
+        let url = `https://www.bing.com/search?q=${encodeURIComponent(term)}&PC=U316&FORM=CHROMN`;
         let rand = 0;
         let delay = 0
         if (i > 1) {
