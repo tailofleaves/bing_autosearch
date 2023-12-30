@@ -1,0 +1,14 @@
+{
+    "name": "Bing Auto Search",
+    "short_name": "Bing Auto Search",
+    "icons": [
+        {
+            "src": "/android-chrome-144x144.png?v=1.0",
+            "sizes": "144x144",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}
