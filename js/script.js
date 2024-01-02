@@ -397,6 +397,12 @@ window.addEventListener("load", () => {
   }
   //check for autostart parameter
   if(getURLParameter('autorun') === 'true' || getURLParameter('autostart') === 'true') {
-    BING_AUTOSEARCH.elements.button.start.click();
+    if (!isNaN(parseInt(getURLParameter('delay')))) {
+      setTimeout(() => {
+        BING_AUTOSEARCH.elements.button.start.click();
+      }, parseInt(getURLParameter('delay')))
+    } else {
+      BING_AUTOSEARCH.elements.button.start.click();
+    }
   }
 });
